@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Projects | BLACK THORN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root { --bg: #000; --accent: #00ff66; --text: #fff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        body { background: var(--bg); color: var(--text); font-family: 'Poppins', sans-serif; }
+        #cursor { position: fixed; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); box-shadow: 0 0 20px var(--accent); }
+        nav { display: flex; justify-content: space-between; padding: 25px 10%; position: fixed; width: 100%; top: 0; z-index: 1000; background: rgba(0,0,0,0.9); border-bottom: 1px solid #111; }
+        .logo { font-weight: 800; font-size: 1.5rem; } .logo span { color: var(--accent); }
+        nav ul { display: flex; list-style: none; gap: 30px; }
+        nav ul a { font-size: 0.8rem; text-transform: uppercase; color: #fff; text-decoration: none; letter-spacing: 2px; }
+        .header { padding: 180px 10% 50px; }
+        .header h1 { font-size: 4rem; font-weight: 800; } .header span { color: var(--accent); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; padding: 0 10% 100px; }
+        .card { background: #0a0a0a; border: 1px solid #151515; padding: 40px; transition: 0.4s; position: relative; overflow: hidden; }
+        .card:hover { border-color: var(--accent); transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,255,102,0.1); }
+        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 15px; border: 1px solid #111; }
+        .card h3 { font-size: 1.8rem; margin-bottom: 15px; color: var(--accent); }
+        .card p { color: #888; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <div id="cursor"></div>
+    <nav>
+        <div class="logo">BLACK <span>THORN</span></div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="project.html" style="color: var(--accent);">Projects</a></li>
+            <li><a href="vault.html">Vault</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+    <div class="header"><h1>SELECTED <span>WORKS.</span></h1></div>
+    <div class="grid" id="project-grid">
+        </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+        });
+
+        async function loadProjects() {
+            const res = await fetch('db.json?t=' + Date.now());
+            const data = await res.json();
+            const grid = document.getElementById('project-grid');
+            grid.innerHTML = ''; 
+            data.projects.forEach(p => {
+                grid.innerHTML += `
+                    <div class="card" data-aos="fade-up">
+                        <img src="${p.image}">
+                        <h3>${p.title}</h3>
+                        <p>${p.desc}</p>
+                    </div>`;
+            });
+        }
+        loadProjects();
+    </script>
+</body>
+</html>
